@@ -7,16 +7,19 @@ next: hooks-faq.html
 ---
 
 *Hooks* are a new addition in React 16.8. They let you use state and other React features without writing a class.
+*Hooks* là một phần mới trong React 16.8. Chúng cho phép bạn sử dụng state và những phần khác (features) của React ngoài việc phải viết một class.
 
 This page describes the APIs for the built-in Hooks in React.
+Trang này sẽ mô tả những API cho những Hooks được xây dựng sẵn (built-in) trong React.
 
 If you're new to Hooks, you might want to check out [the overview](/docs/hooks-overview.html) first. You may also find useful information in the [frequently asked questions](/docs/hooks-faq.html) section.
+Nếu bạn chưa biết về Hook, bạn có thể tham khảo [Tổng quan về Hook](/docs/hooks-overview.html) trước. Bạn cũng có thể tìm thấy thông tin hữu ích trong phần [những câu hỏi thương gặp](/docs/hooks-faq.html).
 
-- [Basic Hooks](#basic-hooks)
+- [Những Hook cơ bản](#basic-hooks)
   - [`useState`](#usestate)
   - [`useEffect`](#useeffect)
   - [`useContext`](#usecontext)
-- [Additional Hooks](#additional-hooks)
+- [Các Hook bổ sung](#additional-hooks)
   - [`useReducer`](#usereducer)
   - [`useCallback`](#usecallback)
   - [`useMemo`](#usememo)
@@ -25,7 +28,7 @@ If you're new to Hooks, you might want to check out [the overview](/docs/hooks-o
   - [`useLayoutEffect`](#uselayouteffect)
   - [`useDebugValue`](#usedebugvalue)
 
-## Basic Hooks {#basic-hooks}
+## Hooks cơ bản {#basic-hooks}
 
 ### `useState` {#usestate}
 
@@ -33,21 +36,25 @@ If you're new to Hooks, you might want to check out [the overview](/docs/hooks-o
 const [state, setState] = useState(initialState);
 ```
 
-Returns a stateful value, and a function to update it.
+Trả về một giá trị stateful, và một hàm để cập nhật nó.
 
 During the initial render, the returned state (`state`) is the same as the value passed as the first argument (`initialState`).
+Trong suốt quá trình render ban đầu, trạng thái trả về (`state`) có giá trị giống với giá trị được truyền vào ban đầu (`initialState`).
 
 The `setState` function is used to update the state. It accepts a new state value and enqueues a re-render of the component.
+Hàm `setState` được sử dụng để cập nhật trạng thái (state). Nó nhận một giá trị mới và thực hiện một re-render của component.
 
 ```js
 setState(newState);
 ```
 
 During subsequent re-renders, the first value returned by `useState` will always be the most recent state after applying updates.
+Trong suốt quá trình re-renders tiếp theo, giá trị đầu tiên trả về bởi `useState` sẽ luôn luôn là giá trị state gần nhất sau khi ứng dụng (apply) cập nhật.
 
 #### Functional updates {#functional-updates}
 
 If the new state is computed using the previous state, you can pass a function to `setState`. The function will receive the previous value, and return an updated value. Here's an example of a counter component that uses both forms of `setState`:
+Nếu trạng thái (state) mới được tính toán dựa trên trạng thái (state) trước đó, bạn có thể truyền một hàm vào `setState`. Hàm này sẽ nhận giá trị trước đó và trả về một giá trị đã được cập nhật. Hãy xem ví dụ của một counter component bên dưới, nó sử dụng cả hai dạng của `setState`:
 
 ```js
 function Counter({initialCount}) {
@@ -63,24 +70,24 @@ function Counter({initialCount}) {
 }
 ```
 
-The "+" and "-" buttons use the functional form, because the updated value is based on the previous value. But the "Reset" button uses the normal form, because it always sets the count back to 0.
+Button "+" và "-" sử dụng hình thức functional, bởi vì giá trị được cập nhật dự trên giá trị trước đó. Nhưng button "Reset" chỉ sử dụng hình thức thông thường, bởi vì nó luôn luôn gán giá trị của count về 0.
 
-> Note
+> Chú ý
 >
-> Unlike the `setState` method found in class components, `useState` does not automatically merge update objects. You can replicate this behavior by combining the function updater form with object spread syntax:
+> Không giống như phương thức (method) `setState` tìm trong component dạng class, `useState` không tự động gộp (merge) state dạng object. Bạn có thể thay thế trạng thái này bằng cách kết hợp hình thức cập nhật bằng function với cú pháp object spread.
 >
 > ```js
 > setState(prevState => {
->   // Object.assign would also work
+>   // Object.assign cũng sẽ work
 >   return {...prevState, ...updatedValues};
 > });
 > ```
 >
-> Another option is `useReducer`, which is more suited for managing state objects that contain multiple sub-values.
+> Một lựa chọn khác là `useReducer`, cái này thì phù hợp hơn cho việc quản lý state dạng object có chứa nhiều giá trị bên trong (sub-values).
 
 #### Lazy initial state {#lazy-initial-state}
 
-The `initialState` argument is the state used during the initial render. In subsequent renders, it is disregarded. If the initial state is the result of an expensive computation, you may provide a function instead, which will be executed only on the initial render:
+Tham số `initialState` là trạng thái được sử dụng trong suốt quá trình render đầu tiên. Trong những lần render kế tiếp, giá trị này bị bỏ qua. Nếu trạng thái khởi tạo (initial state) là kết quả được tính toán từ một công thức phức tạp, bạn nên cung cấp một hàm thay thế, nó sẽ được thực thi chỉ lần render đầu tiên:
 
 ```js
 const [state, setState] = useState(() => {
